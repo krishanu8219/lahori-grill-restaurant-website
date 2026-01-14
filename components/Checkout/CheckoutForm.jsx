@@ -44,9 +44,9 @@ export default function CheckoutForm() {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ address: formData.address }),
                     });
-                    
+
                     const data = await response.json();
-                    
+
                     if (data.success) {
                         setDeliveryFee(data.deliveryFee);
                         setDistance(data.distance);
@@ -113,20 +113,20 @@ export default function CheckoutForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         // Final validation
         if (!formData.customer_name || !formData.phone) {
             setError('Please provide your name and phone number');
             setCurrentStep(2);
             return;
         }
-        
+
         if (formData.order_type === 'delivery' && !formData.address) {
             setError('Please provide a delivery address');
             setCurrentStep(3);
             return;
         }
-        
+
         setIsSubmitting(true);
         setError('');
 
@@ -191,12 +191,12 @@ export default function CheckoutForm() {
                 {state.items.map((item) => (
                     <div key={item.id} className="cart-review-item">
                         <div className="cart-item-image">
-                            <Image 
-                                src={item.image || '/hero-food.png'} 
+                            <Image
+                                src={item.image || '/hero-food.png'}
                                 alt={item.name}
                                 width={80}
                                 height={80}
-                                style={{ objectFit: 'cover' }}
+                                style={{ objectFit: 'contain' }}
                             />
                         </div>
                         <div className="cart-item-details">
@@ -275,7 +275,7 @@ export default function CheckoutForm() {
     const renderDeliveryOptions = () => (
         <div className="checkout-step step-delivery">
             <h2 className="step-heading">How would you like to receive your order?</h2>
-            
+
             <div className="delivery-options">
                 <label className={`delivery-card ${formData.order_type === 'pickup' ? 'selected' : ''}`}>
                     <input
@@ -358,7 +358,7 @@ export default function CheckoutForm() {
     const renderPaymentMethod = () => (
         <div className="checkout-step step-payment">
             <h2 className="step-heading">Choose Payment Method</h2>
-            
+
             <div className="payment-methods">
                 <label className={`payment-card ${formData.payment_method === 'cash' ? 'selected' : ''}`}>
                     <input
@@ -419,7 +419,7 @@ export default function CheckoutForm() {
                     <div className="summary-row">
                         <span>Delivery Fee</span>
                         <span>
-                            {formData.order_type === 'delivery' 
+                            {formData.order_type === 'delivery'
                                 ? (isCalculatingFee ? '...' : `€${deliveryFee.toFixed(2)}`)
                                 : '€0.00'}
                         </span>
@@ -437,7 +437,7 @@ export default function CheckoutForm() {
     return (
         <div className="premium-checkout-form">
             <StepIndicator currentStep={currentStep} steps={steps} />
-            
+
             <form onSubmit={handleSubmit} className="checkout-steps-container">
                 <div className="step-content">
                     {currentStep === 1 && renderCartReview()}
@@ -449,7 +449,7 @@ export default function CheckoutForm() {
                 {error && (
                     <div className="checkout-error-message">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 15H9V13H11V15ZM11 11H9V5H11V11Z" fill="currentColor"/>
+                            <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 15H9V13H11V15ZM11 11H9V5H11V11Z" fill="currentColor" />
                         </svg>
                         {error}
                     </div>
@@ -463,7 +463,7 @@ export default function CheckoutForm() {
                             className="btn-checkout-nav btn-previous"
                         >
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                             Previous
                         </button>
@@ -477,7 +477,7 @@ export default function CheckoutForm() {
                         >
                             Continue
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </button>
                     ) : (
@@ -495,7 +495,7 @@ export default function CheckoutForm() {
                                 <>
                                     Place Order
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path d="M16.667 7.5L8.33366 15.8333L3.33366 10.8333" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                        <path d="M16.667 7.5L8.33366 15.8333L3.33366 10.8333" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </>
                             )}
