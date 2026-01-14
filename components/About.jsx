@@ -22,7 +22,7 @@ export default function About() {
                     </div>
                     <div className="about-image">
                         <Image
-                            src="/chef-new.jpg"
+                            src="/chef-latest.jpg"
                             alt="Our expert chef presenting signature Lahori dishes"
                             width={600}
                             height={600}
