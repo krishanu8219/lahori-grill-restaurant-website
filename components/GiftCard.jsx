@@ -6,9 +6,9 @@ export default function GiftCard() {
         <section className="giftcard-section">
             <div className="giftcard-container">
                 <div className="giftcard-content">
-                    <h2 className="giftcard-title">GIFT A GIFT CARD!</h2>
-                    <p className="giftcard-subtitle">Give the gift of flavor. Perfect for any occasion!</p>
-                    <Link href="#" className="btn-dark">PURCHASE NOW</Link>
+                    <h2 className="giftcard-title">REGALA UN BUONO REGALO!</h2>
+                    <p className="giftcard-subtitle">Regala il gusto. Perfetto per ogni occasione!</p>
+                    <Link href="#" className="btn-dark">ACQUISTA ORA</Link>
                 </div>
                 <div className="giftcard-image">
                     <Image

@@ -7,12 +7,12 @@ export default function Hero() {
                 <div className="hero-text">
                     <div className="mandala-ornament"></div>
                     <h1 className="hero-title">
-                        <span className="title-line">AUTHENTIC</span>
-                        <span className="title-line title-large">LAHORI</span>
-                        <span className="title-line title-large">CUISINE</span>
+                        <span className="title-line">AUTENTICA</span>
+                        <span className="title-line title-large">CUCINA</span>
+                        <span className="title-line title-large">LAHORESE</span>
                     </h1>
                     <p className="hero-description">
-                        Lahori Grill brings the taste of Pakistan with a twist, freshly made with spices & love!
+                        Lahori Grill porta il gusto del Pakistan con un tocco speciale, preparato fresco con spezie e amore!
                     </p>
                 </div>
                 <div className="hero-image">

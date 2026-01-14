@@ -2284,13 +2284,11 @@ a {
 .connecting-dots {
   flex: 1;
   height: 1px;
-  background-image: repeating-linear-gradient(
-    to right,
-    #666 0px,
-    #666 4px,
-    transparent 4px,
-    transparent 8px
-  );
+  background-image: repeating-linear-gradient(to right,
+      #666 0px,
+      #666 4px,
+      transparent 4px,
+      transparent 8px);
 }
 
 .delicious-item-price {
@@ -2948,6 +2946,7 @@ a {
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -3032,7 +3031,9 @@ a {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
-.cart-item-image img {
+.cart-food-img {
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover !important;
 }
 
@@ -3320,9 +3321,19 @@ a {
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
 }
 
 .checkout-error-message svg {
@@ -3397,7 +3408,9 @@ a {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive - Premium Checkout */

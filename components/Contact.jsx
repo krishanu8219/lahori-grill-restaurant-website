@@ -3,27 +3,27 @@ export default function Contact() {
         <section className="contact-section" id="contact">
             <div className="contact-container">
                 <div className="contact-info">
-                    <h2 className="section-title">FIND US</h2>
+                    <h2 className="section-title">DOVE SIAMO</h2>
                     <div className="contact-details">
                         <div className="contact-item">
                             <span className="contact-icon">📍</span>
                             <div>
-                                <h4>Location</h4>
+                                <h4>Posizione</h4>
                                 <p>Corso Brescia, 22/A<br />10152 Torino, Italy</p>
                             </div>
                         </div>
                         <div className="contact-item">
                             <span className="contact-icon">📞</span>
                             <div>
-                                <h4>Phone</h4>
-                                <p>Online Orders Only</p>
+                                <h4>Telefono</h4>
+                                <p>Solo Ordini Online</p>
                             </div>
                         </div>
                         <div className="contact-item">
                             <span className="contact-icon">🕐</span>
                             <div>
-                                <h4>Hours</h4>
-                                <p>Mon-Wed, Sun: 11:00 AM - 3:00 PM, 6:00 PM - 11:00 PM<br />Thu: Closed</p>
+                                <h4>Orari</h4>
+                                <p>Lun-Mer, Dom: 11:00 - 15:00, 18:00 - 23:00<br />Gio: Chiuso</p>
                             </div>
                         </div>
                     </div>

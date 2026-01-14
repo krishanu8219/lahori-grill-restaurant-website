@@ -45,7 +45,7 @@ export default function Header() {
                     </Link>
                     <div className="nav-right">
                         <Link href="/menu" className="btn-order-now">
-                            ORDER NOW
+                            ORDINA ORA
                         </Link>
                         <CartIcon onClick={toggleCart} />
                         <button
@@ -63,10 +63,10 @@ export default function Header() {
 
                 <div className={`mobile-menu ${isMenuOpen ? 'active' : ''}`}>
                     <Link href="/" onClick={closeMenu}>Home</Link>
-                    <Link href="/#about" onClick={closeMenu}>About</Link>
+                    <Link href="/#about" onClick={closeMenu}>Chi Siamo</Link>
                     <Link href="/menu" onClick={closeMenu}>Menu</Link>
-                    <Link href="/checkout" onClick={closeMenu}>Cart</Link>
-                    <Link href="/#contact" onClick={closeMenu}>Contact</Link>
+                    <Link href="/checkout" onClick={closeMenu}>Carrello</Link>
+                    <Link href="/#contact" onClick={closeMenu}>Contatti</Link>
                 </div>
             </header>
 

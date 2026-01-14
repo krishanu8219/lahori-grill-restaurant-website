@@ -27,10 +27,10 @@ export default function CheckoutForm() {
     });
 
     const steps = [
-        { title: 'Cart', description: 'Review items' },
-        { title: 'Contact', description: 'Your details' },
-        { title: 'Delivery', description: 'Order type' },
-        { title: 'Payment', description: 'Payment method' },
+        { title: 'Carrello', description: 'Rivedi articoli' },
+        { title: 'Contatti', description: 'I tuoi dati' },
+        { title: 'Consegna', description: 'Tipo di ordine' },
+        { title: 'Pagamento', description: 'Metodo di pagamento' },
     ];
 
     // Calculate delivery fee when address changes
@@ -93,12 +93,12 @@ export default function CheckoutForm() {
     const validateStep = () => {
         if (currentStep === 2) {
             if (!formData.customer_name || !formData.phone) {
-                setError('Please fill in all required fields');
+                setError('Si prega di compilare tutti i campi obbligatori');
                 return false;
             }
         }
         if (currentStep === 3 && formData.order_type === 'delivery' && !formData.address) {
-            setError('Please provide a delivery address');
+            setError('Si prega di fornire un indirizzo di consegna');
             return false;
         }
         setError('');
@@ -116,13 +116,13 @@ export default function CheckoutForm() {
 
         // Final validation
         if (!formData.customer_name || !formData.phone) {
-            setError('Please provide your name and phone number');
+            setError('Si prega di fornire nome e numero di telefono');
             setCurrentStep(2);
             return;
         }
 
         if (formData.order_type === 'delivery' && !formData.address) {
-            setError('Please provide a delivery address');
+            setError('Si prega di fornire un indirizzo di consegna');
             setCurrentStep(3);
             return;
         }
@@ -186,7 +186,7 @@ export default function CheckoutForm() {
     // Step 1: Cart Review
     const renderCartReview = () => (
         <div className="checkout-step step-cart-review">
-            <h2 className="step-heading">Review Your Order</h2>
+            <h2 className="step-heading">Riepilogo Ordine</h2>
             <div className="cart-items-list">
                 {state.items.map((item) => (
                     <div key={item.id} className="cart-review-item">
@@ -196,12 +196,12 @@ export default function CheckoutForm() {
                                 alt={item.name}
                                 width={80}
                                 height={80}
-                                style={{ objectFit: 'contain' }}
+                                className="cart-food-img"
                             />
                         </div>
                         <div className="cart-item-details">
                             <h3>{item.name}</h3>
-                            <p className="cart-item-quantity">Qty: {item.quantity}</p>
+                            <p className="cart-item-quantity">Qtà: {item.quantity}</p>
                         </div>
                         <div className="cart-item-price">
                             €{(item.price * item.quantity).toFixed(2)}
@@ -211,11 +211,11 @@ export default function CheckoutForm() {
             </div>
             <div className="cart-total-summary">
                 <div className="summary-row">
-                    <span>Subtotal</span>
+                    <span>Subtotale</span>
                     <span>€{total.toFixed(2)}</span>
                 </div>
                 <div className="summary-row total">
-                    <span>Total</span>
+                    <span>Totale</span>
                     <span>€{total.toFixed(2)}</span>
                 </div>
             </div>
@@ -225,10 +225,10 @@ export default function CheckoutForm() {
     // Step 2: Contact Information
     const renderContactInfo = () => (
         <div className="checkout-step step-contact">
-            <h2 className="step-heading">Contact Information</h2>
+            <h2 className="step-heading">Informazioni di Contatto</h2>
             <div className="form-fields">
                 <div className="form-field">
-                    <label htmlFor="customer_name">Full Name *</label>
+                    <label htmlFor="customer_name">Nome Completo *</label>
                     <input
                         type="text"
                         id="customer_name"
@@ -236,13 +236,13 @@ export default function CheckoutForm() {
                         value={formData.customer_name}
                         onChange={handleChange}
                         required
-                        placeholder="Enter your full name"
+                        placeholder="Inserisci il tuo nome completo"
                         className="premium-input"
                     />
                 </div>
 
                 <div className="form-field">
-                    <label htmlFor="phone">Phone Number *</label>
+                    <label htmlFor="phone">Numero di Telefono *</label>
                     <input
                         type="tel"
                         id="phone"
@@ -256,7 +256,7 @@ export default function CheckoutForm() {
                 </div>
 
                 <div className="form-field">
-                    <label htmlFor="email">Email (Optional)</label>
+                    <label htmlFor="email">Email (Opzionale)</label>
                     <input
                         type="email"
                         id="email"
@@ -274,7 +274,7 @@ export default function CheckoutForm() {
     // Step 3: Delivery/Pickup
     const renderDeliveryOptions = () => (
         <div className="checkout-step step-delivery">
-            <h2 className="step-heading">How would you like to receive your order?</h2>
+            <h2 className="step-heading">Come desideri ricevere il tuo ordine?</h2>
 
             <div className="delivery-options">
                 <label className={`delivery-card ${formData.order_type === 'pickup' ? 'selected' : ''}`}>
@@ -287,8 +287,8 @@ export default function CheckoutForm() {
                     />
                     <div className="delivery-card-content">
                         <div className="delivery-icon">🏪</div>
-                        <h3>Pickup</h3>
-                        <p>Collect from our restaurant</p>
+                        <h3>Ritiro</h3>
+                        <p>Ritira dal nostro ristorante</p>
                     </div>
                     <div className="selection-indicator"></div>
                 </label>
@@ -303,8 +303,8 @@ export default function CheckoutForm() {
                     />
                     <div className="delivery-card-content">
                         <div className="delivery-icon">🚚</div>
-                        <h3>Delivery</h3>
-                        <p>We'll deliver to your door</p>
+                        <h3>Consegna</h3>
+                        <p>Consegniamo a domicilio</p>
                     </div>
                     <div className="selection-indicator"></div>
                 </label>
@@ -313,7 +313,7 @@ export default function CheckoutForm() {
             {formData.order_type === 'delivery' && (
                 <div className="delivery-address-section">
                     <div className="form-field">
-                        <label htmlFor="address">Delivery Address *</label>
+                        <label htmlFor="address">Indirizzo di Consegna *</label>
                         <input
                             type="text"
                             id="address"
@@ -321,18 +321,18 @@ export default function CheckoutForm() {
                             value={formData.address}
                             onChange={handleChange}
                             required={formData.order_type === 'delivery'}
-                            placeholder="Street, number, postal code, city"
+                            placeholder="Via, numero, CAP, città"
                             className="premium-input"
                         />
                         {isCalculatingFee && (
                             <p className="delivery-fee-info" style={{ color: '#888', fontSize: '14px', marginTop: '8px' }}>
-                                🔄 Calculating delivery fee...
+                                🔄 Calcolo costo di consegna...
                             </p>
                         )}
                         {!isCalculatingFee && distance && (
                             <p className="delivery-fee-info" style={{ color: '#4CAF50', fontSize: '14px', marginTop: '8px' }}>
-                                📍 Distance: {distance}km • Delivery fee: €{deliveryFee.toFixed(2)}
-                                {parseFloat(distance) <= 1.5 && ' (Free delivery!)'}
+                                📍 Distanza: {distance}km • Costo consegna: €{deliveryFee.toFixed(2)}
+                                {parseFloat(distance) <= 1.5 && ' (Consegna gratuita!)'}
                             </p>
                         )}
                     </div>
@@ -340,14 +340,14 @@ export default function CheckoutForm() {
             )}
 
             <div className="form-field">
-                <label htmlFor="location_description">Special Instructions (Optional)</label>
+                <label htmlFor="location_description">Istruzioni Speciali (Opzionale)</label>
                 <textarea
                     id="location_description"
                     name="location_description"
                     value={formData.location_description}
                     onChange={handleChange}
                     rows={4}
-                    placeholder="Add any special instructions for your order..."
+                    placeholder="Aggiungi istruzioni speciali per il tuo ordine..."
                     className="premium-textarea"
                 />
             </div>
@@ -357,7 +357,7 @@ export default function CheckoutForm() {
     // Step 4: Payment Method
     const renderPaymentMethod = () => (
         <div className="checkout-step step-payment">
-            <h2 className="step-heading">Choose Payment Method</h2>
+            <h2 className="step-heading">Scegli il Metodo di Pagamento</h2>
 
             <div className="payment-methods">
                 <label className={`payment-card ${formData.payment_method === 'cash' ? 'selected' : ''}`}>
@@ -410,14 +410,14 @@ export default function CheckoutForm() {
             </div>
 
             <div className="order-summary-final">
-                <h3>Order Summary</h3>
+                <h3>Riepilogo Ordine</h3>
                 <div className="summary-details">
                     <div className="summary-row">
-                        <span>Items ({state.items.length})</span>
+                        <span>Articoli ({state.items.length})</span>
                         <span>€{total.toFixed(2)}</span>
                     </div>
                     <div className="summary-row">
-                        <span>Delivery Fee</span>
+                        <span>Costo Consegna</span>
                         <span>
                             {formData.order_type === 'delivery'
                                 ? (isCalculatingFee ? '...' : `€${deliveryFee.toFixed(2)}`)
@@ -426,7 +426,7 @@ export default function CheckoutForm() {
                     </div>
                     <div className="summary-divider"></div>
                     <div className="summary-row total">
-                        <span>Total</span>
+                        <span>Totale</span>
                         <span>€{(total + (formData.order_type === 'delivery' ? deliveryFee : 0)).toFixed(2)}</span>
                     </div>
                 </div>
@@ -465,7 +465,7 @@ export default function CheckoutForm() {
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                            Previous
+                            Indietro
                         </button>
                     )}
 
@@ -475,7 +475,7 @@ export default function CheckoutForm() {
                             onClick={handleNext}
                             className="btn-checkout-nav btn-next"
                         >
-                            Continue
+                            Continua
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
@@ -489,11 +489,11 @@ export default function CheckoutForm() {
                             {isSubmitting ? (
                                 <>
                                     <span className="spinner"></span>
-                                    Processing...
+                                    Elaborazione...
                                 </>
                             ) : (
                                 <>
-                                    Place Order
+                                    Invia Ordine
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                         <path d="M16.667 7.5L8.33366 15.8333L3.33366 10.8333" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>

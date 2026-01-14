@@ -13,14 +13,14 @@ export default function Footer() {
                         height={80}
                         className="footer-logo-img"
                     />
-                    <p className="footer-tagline">Authentic Pakistani Cuisine</p>
+                    <p className="footer-tagline">Autentica Cucina Pakistana</p>
                 </div>
                 <div className="footer-links">
                     <Link href="#home">Home</Link>
-                    <Link href="#about">About</Link>
+                    <Link href="#about">Chi Siamo</Link>
                     <Link href="#menu">Menu</Link>
-                    <Link href="#order">Order</Link>
-                    <Link href="#contact">Contact</Link>
+                    <Link href="#order">Ordina</Link>
+                    <Link href="#contact">Contatti</Link>
                 </div>
                 <div className="footer-social">
                     <a href="#" className="social-link" aria-label="Facebook">
@@ -41,7 +41,7 @@ export default function Footer() {
                 </div>
             </div>
             <div className="footer-bottom">
-                <p>&copy; 2026 Lahori Grill. All rights reserved.</p>
+                <p>&copy; 2026 Lahori Grill. Tutti i diritti riservati.</p>
             </div>
         </footer>
     );

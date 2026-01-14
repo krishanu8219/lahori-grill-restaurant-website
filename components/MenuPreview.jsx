@@ -26,7 +26,7 @@ export default function MenuPreview() {
     return (
         <section className="menu-preview" id="menu">
             <div className="menu-preview-container">
-                <h2 className="section-title">OUR SIGNATURE DISHES</h2>
+                <h2 className="section-title">I NOSTRI PIATTI SIGNATURE</h2>
                 <div className="menu-grid">
                     {menuItems.map((item) => (
                         <div key={item.id} className="menu-card">
@@ -46,7 +46,7 @@ export default function MenuPreview() {
                         </div>
                     ))}
                 </div>
-                <Link href="#" className="btn-primary btn-center">VIEW FULL MENU</Link>
+                <Link href="#" className="btn-primary btn-center">VEDI MENU COMPLETO</Link>
             </div>
         </section>
     );
