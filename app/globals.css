@@ -3133,10 +3133,18 @@ a {
 }
 
 /* Step 3: Delivery Options */
-.delivery-options,
-.payment-methods {
+/* Step 3: Delivery Options */
+.delivery-options {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.payment-methods {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* Half width of delivery cards (approx) */
   gap: 1rem;
   margin-bottom: 2rem;
 }
@@ -3148,9 +3156,14 @@ a {
   border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.03);
   border: 2px solid rgba(212, 164, 55, 0.2);
-  padding: 2rem 1.5rem;
+  padding: 1rem;
+  /* Reduced padding */
   transition: all var(--transition-normal);
   overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .delivery-card::before,
@@ -3206,8 +3219,9 @@ a {
 
 .delivery-icon,
 .payment-icon {
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+  /* Reduced icon size */
+  margin-bottom: 0.25rem;
   filter: grayscale(0.3);
   transition: var(--transition-normal);
 }
@@ -3221,7 +3235,8 @@ a {
 .delivery-card-content h3,
 .payment-card-content h3 {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1rem;
+  /* Reduced heading size */
   color: var(--color-gold-light);
   margin: 0;
 }
@@ -3233,10 +3248,12 @@ a {
 
 .delivery-card-content p,
 .payment-card-content p {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--color-cream);
-  opacity: 0.7;
+  opacity: 0.6;
   margin: 0;
+  display: none;
+  /* Hide description for compact look */
 }
 
 .selection-indicator {
@@ -3497,4 +3514,190 @@ a {
     text-align: right;
     margin-top: 0.5rem;
   }
+}
+
+/* ============================================
+   ADDRESS SUGGESTIONS DROPDOWN
+   ============================================ */
+.address-suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(20, 20, 35, 0.98);
+  border: 1px solid var(--color-gold);
+  border-radius: 12px;
+  margin-top: 8px;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+}
+
+.suggestion-item {
+  padding: 14px 18px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(212, 164, 55, 0.15);
+  font-size: 14px;
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background: rgba(212, 164, 55, 0.15);
+  color: var(--color-gold);
+}
+
+.loading-text {
+  color: #888;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.delivery-fee-info {
+  font-size: 14px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+.delivery-fee-info.calculating {
+  color: #888;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.delivery-fee-info.success {
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+/* ============================================
+   PREMIUM CHECKOUT ENHANCEMENTS
+   ============================================ */
+.premium-checkout-form {
+  background: linear-gradient(145deg, rgba(25, 25, 40, 0.95), rgba(15, 15, 25, 0.98));
+  border: 1px solid rgba(212, 164, 55, 0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.premium-input {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 2px solid rgba(212, 164, 55, 0.3) !important;
+  border-radius: 12px !important;
+  padding: 16px 18px !important;
+  font-size: 16px !important;
+  color: #fff !important;
+  transition: all 0.3s ease !important;
+}
+
+.premium-input:focus {
+  border-color: var(--color-gold) !important;
+  background: rgba(212, 164, 55, 0.08) !important;
+  box-shadow: 0 0 20px rgba(212, 164, 55, 0.15) !important;
+  outline: none !important;
+}
+
+.premium-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Enhanced order type cards */
+.order-type-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(212, 164, 55, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.order-type-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(212, 164, 55, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.order-type-card:hover::before,
+.order-type-card.selected::before {
+  opacity: 1;
+}
+
+.order-type-card.selected {
+  border-color: var(--color-gold);
+  box-shadow: 0 8px 32px rgba(212, 164, 55, 0.2);
+}
+
+/* Enhanced payment cards */
+.payment-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(212, 164, 55, 0.2);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.payment-card.selected {
+  border-color: var(--color-gold);
+  background: rgba(212, 164, 55, 0.08);
+  box-shadow: 0 8px 32px rgba(212, 164, 55, 0.2);
+}
+
+/* Enhanced buttons */
+.btn-checkout-nav {
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.btn-next,
+.btn-submit {
+  background: linear-gradient(135deg, var(--color-gold), #c9922e);
+  box-shadow: 0 8px 24px rgba(212, 164, 55, 0.3);
+}
+
+.btn-next:hover,
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(212, 164, 55, 0.4);
+}
+
+.btn-previous {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-previous:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Form labels enhancement */
+.form-field label {
+  color: var(--color-gold);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* Step indicator enhancements */
+.step-circle.active {
+  box-shadow: 0 0 20px rgba(212, 164, 55, 0.5);
+}
+
+.step-circle.completed {
+  background: linear-gradient(135deg, var(--color-gold), #c9922e);
 }

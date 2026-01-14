@@ -5,6 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useCart, calculateTotal } from '@/context/CartContext';
 import StepIndicator from './StepIndicator';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+
+// Dynamic import for map component (SSR disabled)
+const LocationPicker = dynamic(() => import('./LocationPicker'), { ssr: false });
 
 export default function CheckoutForm() {
     const { state, dispatch } = useCart();
@@ -15,6 +19,10 @@ export default function CheckoutForm() {
     const [deliveryFee, setDeliveryFee] = useState(0);
     const [isCalculatingFee, setIsCalculatingFee] = useState(false);
     const [distance, setDistance] = useState(null);
+    const [addressSuggestions, setAddressSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
     const [formData, setFormData] = useState({
         customer_name: '',
@@ -29,8 +37,7 @@ export default function CheckoutForm() {
     const steps = [
         { title: 'Carrello', description: 'Rivedi articoli' },
         { title: 'Contatti', description: 'I tuoi dati' },
-        { title: 'Consegna', description: 'Tipo di ordine' },
-        { title: 'Pagamento', description: 'Metodo di pagamento' },
+        { title: 'Ordine', description: 'Consegna e pagamento' },
     ];
 
     // Calculate delivery fee when address changes
@@ -71,11 +78,85 @@ export default function CheckoutForm() {
         return () => clearTimeout(timeoutId);
     }, [formData.address, formData.order_type]);
 
+    // Fetch address suggestions as user types
+    useEffect(() => {
+        const fetchSuggestions = async () => {
+            if (formData.address.length < 3) {
+                setAddressSuggestions([]);
+                setShowSuggestions(false);
+                return;
+            }
+
+            setIsLoadingSuggestions(true);
+            try {
+                // Search with Torino bias for better local results
+                const query = encodeURIComponent(formData.address + ', Torino, Italia');
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=5&addressdetails=1`,
+                    {
+                        headers: {
+                            'User-Agent': 'LahoriGrill/1.0'
+                        }
+                    }
+                );
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const suggestions = data.map(item => ({
+                        display: item.display_name,
+                        short: formatShortAddress(item),
+                    }));
+                    setAddressSuggestions(suggestions);
+                    setShowSuggestions(suggestions.length > 0);
+                }
+            } catch (error) {
+                console.error('Error fetching suggestions:', error);
+            } finally {
+                setIsLoadingSuggestions(false);
+            }
+        };
+
+        const timeoutId = setTimeout(fetchSuggestions, 300); // Debounce 300ms
+        return () => clearTimeout(timeoutId);
+    }, [formData.address]);
+
+    // Helper to format short address from Nominatim result
+    const formatShortAddress = (item) => {
+        const addr = item.address || {};
+        const parts = [];
+        if (addr.road) {
+            parts.push(addr.road + (addr.house_number ? ', ' + addr.house_number : ''));
+        }
+        if (addr.postcode) parts.push(addr.postcode);
+        if (addr.city || addr.town || addr.village) {
+            parts.push(addr.city || addr.town || addr.village);
+        }
+        return parts.join(', ') || item.display_name.split(',').slice(0, 3).join(',');
+    };
+
+    const handleSelectSuggestion = (suggestion) => {
+        setFormData({
+            ...formData,
+            address: suggestion.short,
+        });
+        setShowSuggestions(false);
+        setAddressSuggestions([]);
+    };
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value,
         });
+    };
+
+    const handleMapLocationSelect = (address) => {
+        setFormData({
+            ...formData,
+            address: address,
+        });
+        setShowSuggestions(false);
+        setAddressSuggestions([]);
     };
 
     const nextStep = () => {
@@ -97,22 +178,40 @@ export default function CheckoutForm() {
                 return false;
             }
         }
-        if (currentStep === 3 && formData.order_type === 'delivery' && !formData.address) {
-            setError('Si prega di fornire un indirizzo di consegna');
-            return false;
+        if (currentStep === 3) {
+            if (formData.order_type === 'delivery' && !formData.address) {
+                setError('Si prega di fornire un indirizzo di consegna');
+                return false;
+            }
+            // Payment method is always selected by default (cash), so no extra check needed
         }
         setError('');
         return true;
     };
 
     const handleNext = () => {
+        if (isTransitioning) return;
+
         if (validateStep()) {
+            setIsTransitioning(true);
             nextStep();
+            // Short delay to prevent accidental double-clicks from triggering the next button
+            setTimeout(() => {
+                setIsTransitioning(false);
+            }, 500);
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // If not on the last step, treating enter/submit as "Next"
+        if (currentStep < steps.length) {
+            handleNext();
+            return;
+        }
+
+        if (isTransitioning) return;
 
         // Final validation
         if (!formData.customer_name || !formData.phone) {
@@ -134,29 +233,32 @@ export default function CheckoutForm() {
         const finalDeliveryFee = formData.order_type === 'delivery' ? deliveryFee : 0;
         const total = subtotal + finalDeliveryFee;
 
+        // Prepare data for Telegram API
         const orderPayload = {
-            customer_name: formData.customer_name,
-            phone: formData.phone,
-            email: formData.email,
-            order_type: formData.order_type,
-            payment_method: formData.payment_method,
-            address: formData.address,
-            location_description: formData.location_description,
+            customer: {
+                name: formData.customer_name,
+                phone: formData.phone,
+                email: formData.email || ''
+            },
             items: state.items.map(item => ({
-                id: item.id,
                 name: item.name,
                 quantity: item.quantity,
-                unit_price: item.price,
-                image: item.image,
+                price: item.price
             })),
-            subtotal: subtotal,
-            delivery_fee: finalDeliveryFee,
-            delivery_distance: distance,
-            total_price: total,
+            delivery: {
+                type: formData.order_type,
+                address: formData.order_type === 'delivery' ? formData.address : 'N/A',
+                fee: finalDeliveryFee,
+                instructions: formData.location_description || ''
+            },
+            payment: {
+                method: formData.payment_method
+            },
+            total: total
         };
 
         try {
-            const response = await fetch('/api/order', {
+            const response = await fetch('/api/telegram-order', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -167,15 +269,36 @@ export default function CheckoutForm() {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.error || 'Failed to place order');
+                // Check if it's a known configuration error
+                if (response.status === 500 && data.error && data.error.includes('Missing Telegram credentials')) {
+                    throw new Error('Configurazione Server Incompleta: Credenziali Telegram mancanti. Contattare il ristorante.');
+                }
+                throw new Error(data.error || 'Si è verificato un errore durante l\'invio dell\'ordine.');
             }
 
             // Clear cart and redirect to confirmation
             dispatch({ type: 'CLEAR_CART' });
-            const orderData = encodeURIComponent(JSON.stringify(data.order));
+
+            // Pass data formatted for confirmation page
+            const confirmationData = {
+                id: Date.now().toString().slice(-6),
+                customer_name: formData.customer_name,
+                phone: formData.phone,
+                order_type: formData.order_type,
+                address: formData.order_type === 'delivery' ? formData.address : null,
+                payment_method: formData.payment_method,
+                items: state.items.map(item => ({
+                    quantity: item.quantity,
+                    name: item.name,
+                    unit_price: item.price
+                })),
+                total_price: total
+            };
+            const orderData = encodeURIComponent(JSON.stringify(confirmationData));
             router.push(`/order-confirmation?data=${orderData}`);
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to place order');
+            console.error('Order submission error:', err);
+            setError(err instanceof Error ? err.message : 'Si è verificato un errore imprevisto.');
         } finally {
             setIsSubmitting(false);
         }
@@ -314,27 +437,57 @@ export default function CheckoutForm() {
                 <div className="delivery-address-section">
                     <div className="form-field">
                         <label htmlFor="address">Indirizzo di Consegna *</label>
-                        <input
-                            type="text"
-                            id="address"
-                            name="address"
-                            value={formData.address}
-                            onChange={handleChange}
-                            required={formData.order_type === 'delivery'}
-                            placeholder="Via, numero, CAP, città"
-                            className="premium-input"
-                        />
+
+                        {/* Input wrapper for proper dropdown positioning */}
+                        <div style={{ position: 'relative' }}>
+                            <input
+                                type="text"
+                                id="address"
+                                name="address"
+                                value={formData.address}
+                                onChange={handleChange}
+                                onFocus={() => addressSuggestions.length > 0 && setShowSuggestions(true)}
+                                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                                required={formData.order_type === 'delivery'}
+                                placeholder="Via, numero, CAP, città"
+                                className="premium-input"
+                                autoComplete="off"
+                            />
+
+                            {/* Address Suggestions Dropdown - directly after input */}
+                            {showSuggestions && addressSuggestions.length > 0 && (
+                                <div className="address-suggestions-dropdown">
+                                    {addressSuggestions.map((suggestion, index) => (
+                                        <div
+                                            key={index}
+                                            onClick={() => handleSelectSuggestion(suggestion)}
+                                            className="suggestion-item"
+                                        >
+                                            📍 {suggestion.short}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {isLoadingSuggestions && (
+                            <p className="loading-text">🔍 Ricerca indirizzi...</p>
+                        )}
+
                         {isCalculatingFee && (
-                            <p className="delivery-fee-info" style={{ color: '#888', fontSize: '14px', marginTop: '8px' }}>
+                            <p className="delivery-fee-info calculating">
                                 🔄 Calcolo costo di consegna...
                             </p>
                         )}
                         {!isCalculatingFee && distance && (
-                            <p className="delivery-fee-info" style={{ color: '#4CAF50', fontSize: '14px', marginTop: '8px' }}>
+                            <p className="delivery-fee-info success">
                                 📍 Distanza: {distance}km • Costo consegna: €{deliveryFee.toFixed(2)}
                                 {parseFloat(distance) <= 1.5 && ' (Consegna gratuita!)'}
                             </p>
                         )}
+
+                        {/* Map for pin-drop location selection */}
+                        <LocationPicker onLocationSelect={handleMapLocationSelect} />
                     </div>
                 </div>
             )}
@@ -351,13 +504,8 @@ export default function CheckoutForm() {
                     className="premium-textarea"
                 />
             </div>
-        </div>
-    );
 
-    // Step 4: Payment Method
-    const renderPaymentMethod = () => (
-        <div className="checkout-step step-payment">
-            <h2 className="step-heading">Scegli il Metodo di Pagamento</h2>
+            <h2 className="step-heading" style={{ marginTop: '3rem' }}>Metodo di Pagamento</h2>
 
             <div className="payment-methods">
                 <label className={`payment-card ${formData.payment_method === 'cash' ? 'selected' : ''}`}>
@@ -408,42 +556,30 @@ export default function CheckoutForm() {
                     <div className="selection-indicator"></div>
                 </label>
             </div>
-
-            <div className="order-summary-final">
-                <h3>Riepilogo Ordine</h3>
-                <div className="summary-details">
-                    <div className="summary-row">
-                        <span>Articoli ({state.items.length})</span>
-                        <span>€{total.toFixed(2)}</span>
-                    </div>
-                    <div className="summary-row">
-                        <span>Costo Consegna</span>
-                        <span>
-                            {formData.order_type === 'delivery'
-                                ? (isCalculatingFee ? '...' : `€${deliveryFee.toFixed(2)}`)
-                                : '€0.00'}
-                        </span>
-                    </div>
-                    <div className="summary-divider"></div>
-                    <div className="summary-row total">
-                        <span>Totale</span>
-                        <span>€{(total + (formData.order_type === 'delivery' ? deliveryFee : 0)).toFixed(2)}</span>
-                    </div>
-                </div>
-            </div>
         </div>
     );
+
+
 
     return (
         <div className="premium-checkout-form">
             <StepIndicator currentStep={currentStep} steps={steps} />
 
-            <form onSubmit={handleSubmit} className="checkout-steps-container">
+            <form
+                onSubmit={handleSubmit}
+                className="checkout-steps-container"
+                onKeyDown={(e) => {
+                    // Prevent form submission on Enter key unless on final step
+                    if (e.key === 'Enter' && currentStep < steps.length) {
+                        e.preventDefault();
+                        handleNext();
+                    }
+                }}
+            >
                 <div className="step-content">
                     {currentStep === 1 && renderCartReview()}
                     {currentStep === 2 && renderContactInfo()}
                     {currentStep === 3 && renderDeliveryOptions()}
-                    {currentStep === 4 && renderPaymentMethod()}
                 </div>
 
                 {error && (
@@ -474,6 +610,7 @@ export default function CheckoutForm() {
                             type="button"
                             onClick={handleNext}
                             className="btn-checkout-nav btn-next"
+                            disabled={isTransitioning}
                         >
                             Continua
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -484,7 +621,7 @@ export default function CheckoutForm() {
                         <button
                             type="submit"
                             className="btn-checkout-nav btn-submit"
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || isTransitioning}
                         >
                             {isSubmitting ? (
                                 <>
