@@ -51,20 +51,20 @@ export default function Header() {
                         />
                     </Link>
 
-                    <div className={`store-status-badge ${storeStatus.isOpen ? 'open' : 'closed'}`}>
-                        <span className="status-dot"></span>
-                        <span className="status-text">{storeStatus.statusText}</span>
-                    </div>
+
                     <div className="nav-right">
                         {storeStatus.isOpen ? (
                             <Link href="/menu" className="btn-order-now">
                                 ORDINA ORA
                             </Link>
                         ) : (
-                            <button className="btn-order-now disabled" disabled title={storeStatus.nextOpen}>
-                                CHIUSO
+                            <button className="btn-order-now closed" disabled title={storeStatus.nextOpen}>
+                                NEGOZIO CHIUSO
                             </button>
                         )}
+                        <Link href="/menu" className="btn-menu-header">
+                            MENU
+                        </Link>
                         <CartIcon onClick={toggleCart} />
                         <button
                             className="menu-toggle"
