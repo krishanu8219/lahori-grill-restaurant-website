@@ -7,7 +7,7 @@ import CartIcon from './Cart/CartIcon';
 import CartDrawer from './Cart/CartDrawer';
 import { getStoreStatus } from '@/lib/storeStatus';
 
-export default function Header() {
+export default function Header({ isHomepage = false }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [storeStatus, setStoreStatus] = useState({ isOpen: true, statusText: '', nextOpen: '' });
@@ -38,7 +38,7 @@ export default function Header() {
 
     return (
         <>
-            <header className="header" id="header">
+            <header className={`header ${isHomepage ? 'header-homepage' : ''}`} id="header">
                 <nav className="nav">
                     <Link href="/" className="logo">
                         <Image

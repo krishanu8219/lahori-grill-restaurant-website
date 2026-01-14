@@ -1,24 +1,30 @@
 export default function Contact() {
+    const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=Corso+Brescia+22/A+10152+Torino+Italy';
+
     return (
         <section className="contact-section" id="contact">
             <div className="contact-container">
                 <div className="contact-info">
                     <h2 className="section-title">DOVE SIAMO</h2>
                     <div className="contact-details">
-                        <div className="contact-item">
+                        {/* Posizione - Opens Google Maps */}
+                        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="contact-item contact-item-link">
                             <span className="contact-icon">📍</span>
                             <div>
                                 <h4>Posizione</h4>
                                 <p>Corso Brescia, 22/A<br />10152 Torino, Italy</p>
                             </div>
-                        </div>
-                        <div className="contact-item">
+                        </a>
+
+                        {/* Telefono - Makes a call */}
+                        <a href="tel:+393512949055" className="contact-item contact-item-link">
                             <span className="contact-icon">📞</span>
                             <div>
                                 <h4>Telefono</h4>
-                                <p>Solo Ordini Online</p>
+                                <p>+39 351 294 9055<br />Chiama per prenotare</p>
                             </div>
-                        </div>
+                        </a>
+
                         <div className="contact-item">
                             <span className="contact-icon">🕐</span>
                             <div>
@@ -30,7 +36,7 @@ export default function Contact() {
                 </div>
                 <div className="contact-map">
                     <a
-                        href="https://www.google.com/maps/place/Lahori+Grill/@45.0896,7.6614,17z"
+                        href={mapsUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="map-link"
@@ -51,3 +57,4 @@ export default function Contact() {
         </section>
     );
 }
+

@@ -9,8 +9,8 @@ import Footer from '@/components/Footer';
 export default function Home() {
   return (
     <>
-      <Header />
-      <main>
+      <Header isHomepage={true} />
+      <main className="is-homepage">
         <Hero />
         <Marquee />
         <About />
@@ -21,3 +21,4 @@ export default function Home() {
     </>
   );
 }
+

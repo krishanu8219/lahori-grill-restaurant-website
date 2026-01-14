@@ -1,6 +1,8 @@
 import { Outfit, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
+import BottomNav from '@/components/BottomNav';
+import StickyCartBar from '@/components/Cart/StickyCartBar';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -31,6 +33,8 @@ export default function RootLayout({ children }) {
       <body suppressHydrationWarning>
         <CartProvider>
           {children}
+          <StickyCartBar />
+          <BottomNav />
         </CartProvider>
       </body>
     </html>
