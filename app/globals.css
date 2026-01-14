@@ -98,6 +98,10 @@ a {
   right: 0;
   z-index: 1000;
   background: var(--color-dark);
+  border-bottom: none !important;
+  /* Force remove any border */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  /* Use shadow instead of line */
 }
 
 .nav {
@@ -959,37 +963,41 @@ a {
 
 @media (max-width: 768px) {
   .nav {
-    padding: 0.5rem;
-    gap: 0.5rem;
+    padding: 0.8rem 0.5rem;
+    /* Increase vertical padding */
+    gap: 0.3rem;
+    /* Reduce gap */
+    border-bottom: none;
   }
 
   .nav-right {
-    gap: 0.5rem;
+    gap: 0.3rem;
   }
 
   /* Make logo prominent but fit */
   .logo-img {
-    height: 45px;
+    height: 48px;
+    /* Slightly bigger logo */
     width: auto;
   }
 
   /* Compact Order/Closed Button */
   .btn-order-now,
   .btn-order-now.closed {
-    padding: 0.4rem 0.6rem;
-    font-size: 0.65rem;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.6rem;
+    /* Smaller font */
     white-space: nowrap;
+    border-radius: 4px;
   }
 
   /* Compact Menu Button */
-  /* Compact Menu Button */
   .btn-menu-header {
-    margin-left: 0.2rem;
-    padding: 0 0.8rem;
-    /* Remove vertical padding */
-    font-size: 0.7rem;
-    height: 32px;
-    /* Fixed height for mobile */
+    margin-left: 0.1rem;
+    padding: 0 0.5rem;
+    font-size: 0.65rem;
+    height: 28px;
+    /* Fixed height 28px */
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -998,32 +1006,40 @@ a {
 
   /* Adjust Cart Icon Wrapper */
   .cart-icon-btn {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    /* Fixed height 28px */
+    height: 28px;
   }
 
   .cart-icon-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
   }
 
   /* Adjust Menu Toggle */
   .menu-toggle {
-    width: 32px;
-    height: 32px;
-    margin-left: 0.2rem;
+    width: 28px;
+    /* Fixed height 28px */
+    height: 28px;
+    padding: 6px 4px;
+    /* Adjusted padding */
+    margin-left: 0.1rem;
   }
 
   .menu-toggle span {
-    width: 20px;
+    width: 16px;
   }
 
+  /* Make footer logo prominent on mobile */
+  .footer-logo-img {
+    height: 120px;
+    width: auto;
+  }
+}
+
+@media (max-width: 1024px) {
   .hero-text {
     padding: var(--spacing-md);
-  }
-
-  .title-line {
-    font-size: 1.5rem;
   }
 
   .title-large {
