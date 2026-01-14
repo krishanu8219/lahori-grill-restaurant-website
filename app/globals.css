@@ -1565,7 +1565,8 @@ a {
 .menu-category-nav {
   display: flex;
   justify-content: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
 }
 
 .menu-category-tabs-pills {
@@ -1573,32 +1574,67 @@ a {
   gap: 0.75rem;
   flex-wrap: wrap;
   justify-content: center;
+  max-width: 100%;
 }
 
 .category-pill {
-  padding: 0.75rem 1.75rem;
+  padding: 0.75rem 1.5rem;
   border-radius: 50px;
-  border: 2px solid #e0e0e0;
-  background: #f5f5f5;
-  color: #666;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-cream);
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .category-pill:hover {
-  border-color: #ff8c00;
-  color: #ff8c00;
-  background: #fff5e6;
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  background: rgba(212, 164, 55, 0.1);
 }
 
 .category-pill.active {
-  background: #ff8c00;
-  border-color: #ff8c00;
-  color: var(--color-white);
-  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-mustard) 100%);
+  border-color: var(--color-gold);
+  color: var(--color-dark);
+  box-shadow: 0 4px 15px rgba(212, 164, 55, 0.4);
+  font-weight: 700;
+}
+
+/* Mobile: Horizontal scroll for category pills */
+@media (max-width: 768px) {
+  .menu-category-nav {
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.5rem 0;
+    margin: 0 -1rem 1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .menu-category-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .menu-category-tabs-pills {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    padding-right: 1rem;
+  }
+
+  .category-pill {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
 }
 
 /* Menu Items - 2 Column Row Layout */
@@ -2327,10 +2363,10 @@ a {
   bottom: -12px;
   left: 50%;
   transform: translateX(-50%);
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: var(--color-red);
+  background: linear-gradient(135deg, var(--color-red) 0%, var(--color-red-dark) 100%);
   border: 3px solid #1a1a1a;
   color: white;
   font-size: 1.5rem;
@@ -2339,13 +2375,17 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.5);
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.5);
   transition: all 0.3s ease;
 }
 
 .btn-add-overlay:hover {
   transform: translateX(-50%) scale(1.1);
-  background: var(--color-red-dark);
+  background: linear-gradient(135deg, var(--color-red-dark) 0%, var(--color-red) 100%);
+}
+
+.btn-add-overlay:active {
+  transform: translateX(-50%) scale(0.95);
 }
 
 .item-qty-overlay {
@@ -2355,20 +2395,20 @@ a {
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  background: var(--color-red);
-  border-radius: 20px;
+  background: linear-gradient(135deg, var(--color-red) 0%, var(--color-red-dark) 100%);
+  border-radius: 25px;
   border: 3px solid #1a1a1a;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.5);
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.5);
 }
 
 .qty-btn-mini {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   background: transparent;
   border: none;
   color: white;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
@@ -2381,12 +2421,41 @@ a {
   background: rgba(0, 0, 0, 0.2);
 }
 
+.qty-btn-mini:active {
+  background: rgba(0, 0, 0, 0.4);
+}
+
 .qty-val {
-  min-width: 24px;
+  min-width: 28px;
   text-align: center;
   color: white;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
+}
+
+/* Mobile: Larger touch targets */
+@media (max-width: 768px) {
+  .btn-add-overlay {
+    width: 48px;
+    height: 48px;
+    font-size: 1.75rem;
+    bottom: -15px;
+  }
+
+  .item-qty-overlay {
+    bottom: -15px;
+  }
+
+  .qty-btn-mini {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+
+  .qty-val {
+    min-width: 32px;
+    font-size: 1rem;
+  }
 }
 
 /* Content Area */
@@ -2765,66 +2834,114 @@ a {
 
 .confirmation-content {
   max-width: 600px;
+  width: 100%;
   margin: 0 auto;
-  padding: 3rem 2rem;
+  padding: 2rem 1rem;
   text-align: center;
 }
 
+/* Success Icon with Animation */
+@keyframes confirmPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes confirmCheck {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-45deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
 .confirmation-icon {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-mustard) 100%);
-  color: var(--color-dark);
-  font-size: 3rem;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+  color: var(--color-white);
+  font-size: 3.5rem;
   font-weight: 700;
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
+  box-shadow: 0 8px 30px rgba(76, 175, 80, 0.4);
+  animation: confirmPulse 2s ease-in-out infinite;
 }
 
 .confirmation-content h1 {
   font-family: var(--font-heading);
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: var(--color-gold);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .confirmation-message {
   color: var(--color-cream);
-  opacity: 0.8;
+  opacity: 0.9;
   margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .confirmation-details {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(212, 164, 55, 0.2);
   border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
   text-align: left;
 }
 
 .confirmation-row {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   padding: 0.75rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--color-cream);
+  font-size: 0.95rem;
+  gap: 1rem;
 }
 
 .confirmation-row:last-child {
   border-bottom: none;
 }
 
+.confirmation-row span:first-child {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+}
+
+.confirmation-row span:last-child,
+.confirmation-row strong {
+  text-align: right;
+  word-break: break-word;
+}
+
 .confirmation-row strong {
   color: var(--color-gold);
+  font-weight: 700;
 }
 
 .confirmation-items {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(212, 164, 55, 0.2);
   border-radius: var(--radius-lg);
-  padding: 1.5rem;
+  padding: 1.25rem;
   margin-bottom: 2rem;
   text-align: left;
 }
@@ -2833,13 +2950,15 @@ a {
   font-family: var(--font-heading);
   color: var(--color-gold);
   margin-bottom: 1rem;
+  font-size: 1.1rem;
 }
 
 .confirmation-item {
   display: flex;
   justify-content: space-between;
-  padding: 0.5rem 0;
+  padding: 0.6rem 0;
   color: var(--color-cream);
+  font-size: 0.9rem;
 }
 
 .confirmation-total {
@@ -2847,9 +2966,44 @@ a {
   justify-content: space-between;
   padding-top: 1rem;
   margin-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  font-size: 1.25rem;
+  border-top: 2px solid var(--color-gold);
+  font-size: 1.3rem;
   color: var(--color-gold);
+  font-weight: 700;
+}
+
+/* Mobile-specific confirmation tweaks */
+@media (max-width: 768px) {
+  .confirmation-page-container {
+    padding-top: 80px;
+    padding-bottom: 2rem;
+    align-items: flex-start;
+  }
+
+  .confirmation-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .confirmation-icon {
+    width: 80px;
+    height: 80px;
+    font-size: 2.5rem;
+  }
+
+  .confirmation-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .confirmation-row {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.6rem 0;
+  }
+
+  .confirmation-row span:last-child,
+  .confirmation-row strong {
+    text-align: left;
+  }
 }
 
 /* ========================================
