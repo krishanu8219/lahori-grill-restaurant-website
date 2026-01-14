@@ -3025,10 +3025,15 @@ a {
 .cart-item-image {
   width: 80px;
   height: 80px;
-  border-radius: var(--radius-md);
+  border-radius: 20px;
   overflow: hidden;
   flex-shrink: 0;
-  border: 2px solid rgba(212, 164, 55, 0.2);
+  border: 2px solid rgba(212, 164, 55, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.cart-item-image img {
+  object-fit: cover !important;
 }
 
 .cart-item-details {
