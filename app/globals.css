@@ -982,11 +982,18 @@ a {
   }
 
   /* Compact Menu Button */
+  /* Compact Menu Button */
   .btn-menu-header {
-    padding: 0.3rem 0.6rem;
+    margin-left: 0.2rem;
+    padding: 0 0.8rem;
+    /* Remove vertical padding */
     font-size: 0.7rem;
     height: 32px;
-    margin-left: 0.2rem;
+    /* Fixed height for mobile */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: normal;
   }
 
   /* Adjust Cart Icon Wrapper */
@@ -1091,16 +1098,19 @@ a {
   font-family: var(--font-heading);
   color: var(--color-gold);
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.85rem;
   letter-spacing: 0.1em;
-  padding: 0.5rem 1.2rem;
+  padding: 0 1.2rem;
+  /* Remove vertical padding */
   border: 1px solid var(--color-gold);
   border-radius: var(--radius-sm);
   transition: all var(--transition-short);
   margin-left: 0.5rem;
   display: inline-flex;
   align-items: center;
-  height: 48px;
+  justify-content: center;
+  height: 44px;
+  /* Match Desktop Cart Icon Height */
 }
 
 .btn-menu-header:hover {
@@ -1176,8 +1186,10 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  /* Match Desktop Cart Icon Width */
+  height: 44px;
+  /* Match Desktop Cart Icon Height */
   background: transparent;
   border: 2px solid var(--color-gold);
   border-radius: var(--radius-sm);

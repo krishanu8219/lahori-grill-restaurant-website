@@ -2,11 +2,13 @@
   "name": "lahori-grill",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
@@ -16,9 +18,11 @@
     "react-leaflet": "^5.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
+    "jest": "^30.2.0",
     "sharp": "^0.34.5"
   }
 }

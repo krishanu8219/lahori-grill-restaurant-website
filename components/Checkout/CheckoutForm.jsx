@@ -223,10 +223,41 @@ export default function CheckoutForm() {
             return;
         }
 
-        if (formData.order_type === 'delivery' && !formData.address) {
-            setError('Si prega di fornire un indirizzo di consegna');
-            setCurrentStep(3);
-            return;
+        if (formData.order_type === 'delivery') {
+            if (!formData.address) {
+                setError('Si prega di fornire un indirizzo di consegna');
+                setCurrentStep(3);
+                return;
+            }
+
+            // Check minimum order amount for delivery
+            const subtotal = calculateTotal(state.items);
+            if (subtotal < 15) {
+                setError('L\'ordine minimo per la consegna è di 15,00 €');
+                return;
+            }
+
+            // Check delivery distance
+            try {
+                setIsSubmitting(true);
+                const response = await fetch('/api/calculate-delivery', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ address: formData.address }),
+                });
+
+                const data = await response.json();
+                setIsSubmitting(false);
+
+                if (data.success && data.distance && parseFloat(data.distance) > 4.5) {
+                    setError('Ci dispiace, ma non effettuiamo consegne in questa zona. È fuori dal nostro raggio di consegna.');
+                    return;
+                }
+            } catch (err) {
+                setIsSubmitting(false);
+                console.error('Error checking delivery distance:', err);
+                // Optionally allow to proceed or show specific error errors
+            }
         }
 
         setIsSubmitting(true);
