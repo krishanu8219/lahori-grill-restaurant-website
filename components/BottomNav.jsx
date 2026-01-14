@@ -13,7 +13,7 @@ export default function BottomNav() {
     const navItems = [
         { href: '/', label: 'Home', icon: '🏠' },
         { href: '/menu', label: 'Menu', icon: '📋' },
-        { href: '/checkout', label: 'Carrello', icon: '🛒', showBadge: true },
+        { href: '/cart', label: 'Carrello', icon: '🛒', showBadge: true },
         { href: '/#contact', label: 'Contatti', icon: '📞' },
     ];
 
