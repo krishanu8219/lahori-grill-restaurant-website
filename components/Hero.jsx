@@ -5,7 +5,15 @@ export default function Hero() {
         <section className="hero" id="home">
             <div className="hero-content">
                 <div className="hero-text">
-                    <div className="mandala-ornament"></div>
+                    <div style={{ width: '120px', marginBottom: '1.5rem' }}>
+                        <Image
+                            src="/halal-badge.png"
+                            alt="100% Halal"
+                            width={120}
+                            height={120}
+                            style={{ width: '100%', height: 'auto' }}
+                        />
+                    </div>
                     <h1 className="hero-title">
                         <span className="title-line">AUTENTICA</span>
                         <span className="title-line title-large">CUCINA</span>

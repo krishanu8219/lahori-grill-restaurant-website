@@ -6,6 +6,7 @@ import { useCart, calculateTotal } from '@/context/CartContext';
 import StepIndicator from './StepIndicator';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { getStoreStatus } from '@/lib/storeStatus';
 
 // Dynamic import for map component (SSR disabled)
 const LocationPicker = dynamic(() => import('./LocationPicker'), { ssr: false });
@@ -16,6 +17,8 @@ export default function CheckoutForm() {
     const [currentStep, setCurrentStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const [storeClosed, setStoreClosed] = useState(false);
+    const [storeStatusMsg, setStoreStatusMsg] = useState('');
     const [deliveryFee, setDeliveryFee] = useState(0);
     const [isCalculatingFee, setIsCalculatingFee] = useState(false);
     const [distance, setDistance] = useState(null);
@@ -560,6 +563,38 @@ export default function CheckoutForm() {
     );
 
 
+
+    // Check store status
+    useEffect(() => {
+        const checkStatus = () => {
+            const status = getStoreStatus();
+            if (!status.isOpen) {
+                setStoreClosed(true);
+                setStoreStatusMsg(`Il ristorante è attualmente chiuso. ${status.nextOpen}`);
+            }
+        };
+        checkStatus();
+    }, []);
+
+    if (storeClosed) {
+        return (
+            <div className="premium-checkout-form" style={{ textAlign: 'center', padding: '3rem' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔒</div>
+                <h2 className="step-heading" style={{ color: 'var(--color-red)' }}>Negozio Chiuso</h2>
+                <p style={{ color: 'var(--color-cream)', marginBottom: '2rem' }}>
+                    Ci dispiace, non accettiamo ordini in questo momento.<br />
+                    {storeStatusMsg}
+                </p>
+                <button
+                    onClick={() => router.push('/menu')}
+                    className="btn-checkout-nav btn-previous"
+                    style={{ margin: '0 auto', display: 'inline-flex' }}
+                >
+                    Torna al Menu
+                </button>
+            </div>
+        );
+    }
 
     return (
         <div className="premium-checkout-form">

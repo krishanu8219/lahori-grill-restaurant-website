@@ -1,14 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import CartIcon from './Cart/CartIcon';
 import CartDrawer from './Cart/CartDrawer';
+import { getStoreStatus } from '@/lib/storeStatus';
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [storeStatus, setStoreStatus] = useState({ isOpen: true, statusText: '', nextOpen: '' });
+
+    useEffect(() => {
+        setStoreStatus(getStoreStatus());
+        const interval = setInterval(() => {
+            setStoreStatus(getStoreStatus());
+        }, 60000);
+        return () => clearInterval(interval);
+    }, []);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -30,9 +40,6 @@ export default function Header() {
         <>
             <header className="header" id="header">
                 <nav className="nav">
-                    <Link href="/menu" className="locations-btn">
-                        <span>MENU</span>
-                    </Link>
                     <Link href="/" className="logo">
                         <Image
                             src="/logo.png"
@@ -43,10 +50,21 @@ export default function Header() {
                             priority
                         />
                     </Link>
+
+                    <div className={`store-status-badge ${storeStatus.isOpen ? 'open' : 'closed'}`}>
+                        <span className="status-dot"></span>
+                        <span className="status-text">{storeStatus.statusText}</span>
+                    </div>
                     <div className="nav-right">
-                        <Link href="/menu" className="btn-order-now">
-                            ORDINA ORA
-                        </Link>
+                        {storeStatus.isOpen ? (
+                            <Link href="/menu" className="btn-order-now">
+                                ORDINA ORA
+                            </Link>
+                        ) : (
+                            <button className="btn-order-now disabled" disabled title={storeStatus.nextOpen}>
+                                CHIUSO
+                            </button>
+                        )}
                         <CartIcon onClick={toggleCart} />
                         <button
                             className="menu-toggle"

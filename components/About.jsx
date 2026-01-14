@@ -22,11 +22,11 @@ export default function About() {
                     </div>
                     <div className="about-image">
                         <Image
-                            src="/chef.png"
+                            src="/chef-new.jpg"
                             alt="Our expert chef presenting signature Lahori dishes"
                             width={600}
-                            height={500}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            height={600}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '12px' }}
                         />
                     </div>
                 </div>
