@@ -3,6 +3,7 @@ import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import BottomNav from '@/components/BottomNav';
 import StickyCartBar from '@/components/Cart/StickyCartBar';
+import ClosedBanner from '@/components/ClosedBanner';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${outfit.variable} ${playfair.variable}`}>
       <body suppressHydrationWarning>
         <CartProvider>
+          <ClosedBanner />
           {children}
           <StickyCartBar />
           <BottomNav />
@@ -40,3 +42,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
